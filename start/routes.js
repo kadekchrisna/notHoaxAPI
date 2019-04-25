@@ -37,3 +37,26 @@ Route
         Route.get('category/:id', 'CategoryController.show')
     })
     .prefix('api/v1')
+
+//Post
+Route
+    .group(() => {
+        Route.post('post', 'PostController.store').middleware(['auth'])
+        Route.get('post/:id', 'PostController.show')
+        Route.get('post', 'PostController.index')
+    })
+    .prefix('api/v1')
+
+//Comment
+Route
+    .group(() => {
+        Route.post('comment', 'CommentController.store').middleware(['auth'])
+    })
+    .prefix('api/v1')
+
+//Opinion
+Route
+    .group(() => {
+        Route.post('opinion/:id', 'OpinionController.update').middleware(['auth'])
+    })
+    .prefix('api/v1')

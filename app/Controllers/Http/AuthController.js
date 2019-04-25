@@ -69,7 +69,7 @@ class AuthController {
             user.username = username
             user.email = email
             user.password = password
-            user.image = 'http://chittagongit.com//images/avatar-icon/avatar-icon-4.jpg'
+            user.pp = 'http://chittagongit.com//images/avatar-icon/avatar-icon-4.jpg'
 
             await user.save()
             let accessToken = await auth.generate(user)

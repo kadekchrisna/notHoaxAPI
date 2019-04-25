@@ -23,6 +23,25 @@ class CategoryController {
      * @param {View} ctx.view
      */
     async index({ request, response, view }) {
+
+        try {
+            const categories = await Category.query()
+                .orderBy('name', 'asc')
+                .fetch()
+
+            return response.status(200).json({
+                message: 'Get all categories',
+                data: categories
+            })
+
+        } catch (error) {
+            console.log(error);
+            return response.status(400).json({
+                message: 'Something went wrong!'
+            })
+
+
+        }
     }
 
     /**
@@ -63,6 +82,7 @@ class CategoryController {
                 });
 
             const image = request.file('image', imageRules)
+            console.log(image);
 
             const name = image.clientName;
             const ext = name.split(".")[1];
@@ -82,7 +102,7 @@ class CategoryController {
 
                 const category = new Category();
                 category.name = request.input("name");
-                category.image = fileName;
+                category.cover = fileName;
                 await category.save();
 
                 return response.status(201).json({
@@ -93,8 +113,10 @@ class CategoryController {
             }
 
         } catch (error) {
+            console.log(error);
             return response.status(400).json({
                 message: 'Something went wrong!'
+
             })
 
         }
@@ -110,6 +132,31 @@ class CategoryController {
      * @param {View} ctx.view
      */
     async show({ params, request, response, view }) {
+
+        const Comment = use('App/Models/Comment')
+        const Opinion = use('App/Models/Opinion')
+
+        const Post = use('App/Models/Post')
+
+        try {
+            const category = await Category.find(params.id)
+            if (category == null) {
+                return response.status(404).json({
+                    message: 'Category not found.'
+                })
+            }
+
+            const post = await Post.query()
+                .where('category_id', params.id)
+                .fetch()
+
+            return response.status(200).json({
+                message: 'Get category success.',
+                data: post
+            })
+        } catch (error) {
+
+        }
     }
 
     /**
